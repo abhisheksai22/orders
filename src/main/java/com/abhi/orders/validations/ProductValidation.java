@@ -6,9 +6,17 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class ProductValidation {
+
+    private static final Set<String> ALLOWED_SORT_FIELDS = Set.of(
+            "price",
+            "inventoryId",
+            "createdTimestamp",
+            "id"
+    );
 
     public void checkProductPatchRequestBodyDtoValid(ProductPatchRequestBodyDto dto) {
 
@@ -18,5 +26,11 @@ public class ProductValidation {
             throw new ResourceValidationException("The given request body is null", errorList);
         }
 
+    }
+
+    public void top5AttributeCheck(String by) {
+        if (!ALLOWED_SORT_FIELDS.contains(by)) {
+            throw new IllegalArgumentException("Invalid sort field: " + by);
+        }
     }
 }

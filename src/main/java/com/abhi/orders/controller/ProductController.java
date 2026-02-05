@@ -4,6 +4,7 @@ import com.abhi.orders.model.ProductPatchRequestBodyDto;
 import com.abhi.orders.model.ProductRequestDto;
 import com.abhi.orders.model.ProductResponseDto;
 import com.abhi.orders.service.ProductService;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,9 +47,8 @@ public class ProductController {
 
     @GetMapping("/top5")
     ResponseEntity<List<ProductResponseDto>> getTop5ProductBy(@RequestHeader(REQUEST_ID_HEADER) String xRequestId,
-                                                              @RequestParam("by") String by) {
-        log.info("Entering getTop5ProductBy method in controller...");
-
+                                                              @RequestParam("by") @NotNull String by) {
+        log.info("Entering getTop5ProductBy method in controller..., by : {}", by);
         return new ResponseEntity<>(productService.getTop5ProductBy(by), HttpStatus.OK);
     }
 

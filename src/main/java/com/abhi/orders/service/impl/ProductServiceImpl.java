@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.abhi.orders.constants.ProductConstants.PRODUCT_NOT_FOUND;
 
@@ -30,13 +29,6 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductFactory productFactory;
     private final ProductValidation productValidation;
-
-    private static final Set<String> ALLOWED_SORT_FIELDS = Set.of(
-            "price",
-            "inventoryId",
-            "createdTimestamp",
-            "id"
-    );
 
 
     @Override
@@ -85,10 +77,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public List<ProductResponseDto> getTop5ProductBy(String by) {
-
-        if (!ALLOWED_SORT_FIELDS.contains(by)) {
-            throw new IllegalArgumentException("Invalid sort field: " + by);
-        }
+        productValidation.top5AttributeCheck(by);
 
         Pageable pageable = PageRequest.of(
                 0,
